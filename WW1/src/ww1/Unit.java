@@ -17,6 +17,7 @@ public class Unit<T,U> {
     protected boolean hasParent;
     protected boolean isLeaf;
     protected LinkedList<T> children;
+    protected String parantName;
     
     Unit(String name) {
         this.name = name;
@@ -26,8 +27,9 @@ public class Unit<T,U> {
     
     public void attach(U item){}
     
-    public void isBeingAttached(){
+    public void isBeingAttachedTo(String parantName){
         hasParent=true;
+        this.parantName=parantName;
     }
     
     public int countSoldiers() {
@@ -57,18 +59,15 @@ public class Unit<T,U> {
         return isLeaf;
     }
     
-    public String display() {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append('[');
-        strBuilder.append(getListOfSoldiers());
-        strBuilder.append(']');
-        return strBuilder.toString();
-    }
     
     public int idLastSoldier(){
         return 0;
     }
     public void attach(U item, int afterSoldier){}
-    
+     public String getParantName(){
+         return parantName;
+     }
+    public void detach(String unit){   
+    }
     
 }

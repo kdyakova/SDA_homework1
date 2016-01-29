@@ -18,8 +18,6 @@ class Leaf extends Unit<Integer, LinkedList<Integer>> {
         super(name);
     }
 
-
-    
     @Override
     public int countSoldiers() {
         return children.size();
@@ -27,15 +25,19 @@ class Leaf extends Unit<Integer, LinkedList<Integer>> {
 
     @Override
     public LinkedList<Integer> removeDeathSoldiers(LinkedList<Integer> deathSoldiers) {
-        if (children.peekLast().intValue() < deathSoldiers.peekFirst().intValue()
-                || children.peekFirst().intValue() > deathSoldiers.peekLast().intValue()) {
-            return deathSoldiers;
+        if (!deathSoldiers.isEmpty()) {
+            if (children.peekLast().intValue() < deathSoldiers.peekFirst().intValue()
+                    || children.peekFirst().intValue() > deathSoldiers.peekLast().intValue()) {
+                return deathSoldiers;
+            }
         }
         for (int i = 0; i < children.size(); i++) {
-            if (children.contains(deathSoldiers.get(i))) {
-                children.remove(deathSoldiers.get(i));
-                deathSoldiers.remove(i);
-                i--;
+            if (!deathSoldiers.isEmpty()) {
+                if (children.contains(deathSoldiers.get(i))) {
+                    children.remove(deathSoldiers.get(i));
+                    deathSoldiers.remove(i);
+                    i--;
+                }
             }
         }
         return deathSoldiers;
@@ -50,6 +52,7 @@ class Leaf extends Unit<Integer, LinkedList<Integer>> {
     public int idLastSoldier() {
         return (int) children.peekLast();
     }
+
     @Override
     public void attach(LinkedList<Integer> soldiers) {
         this.children.addAll(soldiers);
@@ -57,4 +60,9 @@ class Leaf extends Unit<Integer, LinkedList<Integer>> {
         isLeaf = true;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
 }

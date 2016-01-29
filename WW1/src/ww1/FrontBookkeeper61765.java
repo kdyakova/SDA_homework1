@@ -5,18 +5,13 @@
  */
 package ww1;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  *
  * @author Krisi
  */
 public class FrontBookkeeper61765 implements IFrontBookkeeper {
-
-    static HashMap<String, Unit> army;
-    static HashMap<Integer, Vector<Unit>> soldiers;
 
     @Override
     public String updateFront(String[] news) {
@@ -51,36 +46,52 @@ public class FrontBookkeeper61765 implements IFrontBookkeeper {
             if (news[i].matches(attachmentPattern)) {
                 String[] info = news[i].split("\\s+attached\\s+to\\s+", 2);
                 if (!UnitsData.getUnit(info[0]).isPartOfUnit()) {
-                    UnitsData.getUnit(info[0]).isBeingAttached();
+                    UnitsData.getUnit(info[0]).isBeingAttachedTo(info[1]);
+                    UnitsData.getUnit(info[1]).attach(UnitsData.getUnit(info[0]));
+                }
+                else
+                {
+                    UnitsData.getUnit(UnitsData.getUnit(info[0]).getParantName()).detach(info[0]);
+                    UnitsData.getUnit(info[0]).isBeingAttachedTo(info[1]);
                     UnitsData.getUnit(info[1]).attach(UnitsData.getUnit(info[0]));
                 }
             }
 
             if (news[i].matches(positionalAttachmentPattern)) {
-                String[] info = news[i].split("(\\s+attached\\s+to\\s+)|(\\s+after\\s+soldier\\s+)", 2);
+                String[] info = news[i].split("(\\s+attached\\s+to\\s+)|(\\s+after\\s+soldier\\s+)", 3);
                 if (!UnitsData.getUnit(info[0]).isPartOfUnit()) {
-                    UnitsData.getUnit(info[0]).isBeingAttached();
-                    UnitsData.getUnit(info[1]).attach(UnitsData.getUnit(info[0]),Integer.parseInt(info[2]));
+                    UnitsData.getUnit(info[0]).isBeingAttachedTo(info[1]);
+                    UnitsData.getUnit(info[1]).attach(UnitsData.getUnit(info[0]), Integer.parseInt(info[2]));
                 }
+                else
+                {
+                    UnitsData.getUnit(UnitsData.getUnit(info[0]).getParantName()).detach(info[0]);
+                    UnitsData.getUnit(info[0]).isBeingAttachedTo(info[1]);
+                    UnitsData.getUnit(info[1]).attach(UnitsData.getUnit(info[0]), Integer.parseInt(info[2]));
+                }
+                
             }
 
             if (news[i].matches(deathPattern)) {
                 String[] info = news[i].split("(soldiers\\s+)|(\\.\\.)|(\\s+from\\s+)|(\\s+died\\sheroically)");
-                LinkedList<Integer> deathSoldiers=new LinkedList<>();
-                for (int j =Integer.parseInt(info[0]); j <= Integer.parseInt(info[1]); j++) {
+                LinkedList<Integer> deathSoldiers = new LinkedList<>();
+                for (int j = Integer.parseInt(info[1]); j <= Integer.parseInt(info[2]); j++) {
                     deathSoldiers.push(j);
                 }
-                UnitsData.getUnit(info[2]).removeDeathSoldiers(deathSoldiers);
+                UnitsData.getUnit(info[3]).removeDeathSoldiers(deathSoldiers);
             }
 
             if (news[i].matches(unitDisplayPattern)) {
-                String[] info=news[i].split("show\\s+",1);
-                builder.append(UnitsData.getUnit(info[0]).showUnit()).append("\n");
+                String[] info = news[i].split("\\s+");
+                if(UnitsData.getUnit(info[1]).showUnit()=="")
+                    builder.append("[]").append("\n");
+                builder.append(UnitsData.getUnit(info[1]).showUnit()).append("\n");
             }
 
             if (news[i].matches(soldierDisplayPattern)) {
-                String[] info=news[i].split("show\\s+soldier\\s+",1);
-                builder.append(SoldiersData.getSoldier(Integer.parseInt(info[0])).getUnits().toString()).append("\n");
+                String[] info = news[i].split("show\\s+soldier\\s+");
+                String a=SoldiersData.getSoldier(Integer.parseInt(info[1])).toString();
+                builder.append(a).append("\n");
             }
         }
         return builder.toString();

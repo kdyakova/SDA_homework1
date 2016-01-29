@@ -5,14 +5,15 @@
  */
 package ww1;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Krisi
  */
 public class UnitsData {
-    private static Hashtable<String,Unit> units;
+    private static Map<String,Unit> units = new HashMap<>();
     public static void add(String key,Unit value){
         UnitsData.units.put(key, value);
     }

@@ -5,7 +5,8 @@
  */
 package ww1;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -13,8 +14,9 @@ import java.util.Hashtable;
  */
 public class SoldiersData {
     
-    private static Hashtable<Integer,Soldier> soldiers;
+    private static Map<Integer,Soldier> soldiers;
     public static void add(int key,Soldier value){
+        soldiers = new HashMap<>();
         SoldiersData.soldiers.put(key, value);
     }
     

@@ -5,7 +5,6 @@
  */
 package ww1;
 
-import java.util.Hashtable;
 import java.util.LinkedList;
 
 /**
@@ -13,27 +12,41 @@ import java.util.LinkedList;
  * @author Krisi
  */
 public class Soldier {
+
     private Integer idSoldier;
-    private LinkedList<Unit>units;
-    
-    
+    private String smallestUnitName;
 
     public Soldier(int idSoldier, Unit unit) {
-        this.idSoldier=idSoldier;
-        this.units.push(unit);
+        this.smallestUnitName = unit.toString();
+        this.idSoldier = idSoldier;
     }
 
     public int getIdSoldier() {
         return idSoldier;
     }
 
-    public LinkedList<Unit> getUnits() {
-        return units;
+    public LinkedList<String> getUnitsNames() {
+        LinkedList<String> unitsNames = new LinkedList();
+        String currentUnitName = this.smallestUnitName;
+        while (UnitsData.getUnit(currentUnitName).isPartOfUnit()) {
+            unitsNames.add(currentUnitName);
+            currentUnitName = UnitsData.getUnit(currentUnitName).getParantName();
+        }
+        unitsNames.add(currentUnitName);
+        return unitsNames;
     }
 
-    public void addUnits(Unit unit) {
-        this.units.add(unit);
+    @Override
+    public String toString() {
+        LinkedList<String> unitsNames = this.getUnitsNames();
+        
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(unitsNames.toString());
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(sb.length()-1);
+        
+        return sb.toString() ;
     }
-    
-    
+
 }
